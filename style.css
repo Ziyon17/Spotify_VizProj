@@ -1,0 +1,969 @@
+/* 基礎樣式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+}
+
+#main-container {
+    width: 90%;
+    max-width: none;
+    margin: 20px auto;
+}
+
+/* Header 樣式 */
+#header {
+    background-color: #1DB954;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column; /* 改為縱向排列 */
+    gap: 10px;
+    margin-bottom: 20px;
+ }
+
+#logo {
+    flex-shrink: 0;
+}
+
+/* 選單樣式 */
+.nav-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-btn {
+    background-color: #282828;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.menu-btn:hover {
+    background-color: #383838;
+}
+
+.submenu {
+    list-style: none;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #282828;
+    border-radius: 8px;
+    padding: 8px 0;
+    margin-top: 5px;
+    min-width: 150px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.submenu button {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: none;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submenu button:hover {
+    background-color: #383838;
+}
+
+.submenu button.selected {
+    background-color: #1DB954;
+    color: white;
+}
+
+/* 主要內容區域 */
+#content-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    height: calc(100vh - 160px);
+    min-height: 600px;
+}
+
+/* 網路圖容器 */
+#graph-container {
+    flex: 3;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative; /* 添加這行 */
+}
+
+#graph-container:fullscreen {
+    background-color: white;
+    padding: 20px;
+    width: 100vw;
+    height: 100vh;
+}
+
+#zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.zoom-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.zoom-btn:hover {
+    background: #f0f0f0;
+}
+
+#graph {
+    width: 100%;
+    height: 100%;
+}
+
+/* 資訊側邊欄 */
+#info-sidebar {
+    width: 300px;
+    flex: 0 0 300px;
+    background-color: #282828;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: calc(100vh - 160px); /* 設定固定高度 */
+    overflow: hidden; /* 防止整個側邊欄出現滾動條 */
+}
+
+/* 半圓形進度條 */
+.popularity-section {
+    position: relative;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.popularity-meter {
+    width: 100%;
+    max-height: 120px;
+}
+
+.meter-bg {
+    stroke: #333;
+    stroke-width: 20; /* 加粗 */
+    fill: none;
+}
+
+.meter-progress {
+    stroke: #1DB954;
+    stroke-width: 20; /* 加粗 */
+    fill: none;
+    stroke-dasharray: 0 160;
+    transition: stroke-dasharray 0.3s ease;
+}
+
+.popularity-value {
+    font-size: 24px;
+    font-weight: bold;
+    fill: white;
+}
+
+.popularity-label {
+    font-size: 14px;
+    fill: #b3b3b3;
+}
+
+/* 修改藝術家照片容器樣式 */
+.artist-photo-container {
+    width: 200px;  /* 固定寬度 */
+    height: 200px; /* 固定高度 */
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0; /* 防止容器被壓縮 */
+}
+
+#artist-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 確保圖片填滿容器且不變形 */
+}
+
+/* 修改歌曲資訊區域 */
+.song-info {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;  /* 增加內邊距 */
+    overflow-y: auto;
+    max-height: calc(100vh - 500px);
+    scrollbar-width: thin;
+    scrollbar-color: #1DB954 #282828;
+}
+
+/* WebKit 瀏覽器的滾動條樣式 */
+.song-info::-webkit-scrollbar {
+    width: 6px;
+}
+
+.song-info::-webkit-scrollbar-track {
+    background: #282828;
+    border-radius: 3px;
+}
+
+.song-info::-webkit-scrollbar-thumb {
+    background: #1DB954;
+    border-radius: 3px;
+}
+
+/* 歌曲標題和播放按鈕的容器 */
+.song-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* 改為兩端對齊 */
+    gap: 1px;  /* 增加間距 */
+    margin-bottom: 8px;  /* 增加底部間距 */
+}
+
+/* 歌曲標題 */
+#song-title {
+    color: #1DB954;
+    margin: 0;
+    font-size: 1.6em;  /* 增大字體 */
+    font-weight: bold;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 調整播放按鈕樣式 */
+.play-button {
+    width: 36px;  /* 稍微加大按鈕 */
+    height: 36px;
+    min-width: 36px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1DB954;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+    text-decoration: none;
+}
+
+/* 修改播放按鈕的圖標 */
+.play-button svg {
+    width: 36px;
+    height: 36px;
+}
+
+/* 播放按鈕懸停效果 */
+.play-button:hover {
+    background-color: #1ed760;
+    transform: scale(1.05);
+}
+
+/* 隱藏播放按鈕 */
+.play-button.hidden {
+    display: none;
+}
+
+/* 藝術家歌曲列表中的播放按鈕 */
+.song-play-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1DB954;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.song-play-button:hover {
+    background-color: #1ed760;
+    transform: scale(1.05);
+}
+
+.song-play-button svg {
+    width: 16px;
+    height: 16px;
+    margin-left: 1px;
+}
+
+.info-row {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start; /* 改為頂部對齊 */
+    gap: 16px;
+}
+
+.info-label {
+    color: #b3b3b3;
+    min-width: 100px;
+    display: inline-block;
+}
+
+.info-value {
+    color: white;
+    flex: 1;
+    word-break: break-word;
+}
+
+/* 預覽按鈕 */
+.preview-button-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.listen-button {
+    display: inline-block;
+    background-color: #1DB954;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.listen-button:hover {
+    background-color: #1ed760;
+}
+
+/* 網路圖節點樣式 */
+.node circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.node text {
+    font-family: Arial, sans-serif;
+    pointer-events: none;
+    user-select: none;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: 0.6;
+}
+
+/* D3-tip 提示框樣式 */
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+    #content-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    #info-sidebar {
+        min-width: 100%;
+    }
+
+    #graph-container {
+        height: 500px;
+    }
+}
+
+/* 動畫效果 */
+.node circle,
+.link,
+.listen-button,
+.menu-btn {
+    transition: all 0.3s ease;
+}
+
+/* 滾動條樣式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #282828;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1DB954;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1ed760;
+}
+
+/* 修改藝術家歌曲列表區域 */
+.artist-songs {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 15px;
+    overflow-y: auto;
+    max-height: calc(100vh - 500px);
+    scrollbar-width: thin;
+    scrollbar-color: #1DB954 #282828;
+}
+
+.artist-songs::-webkit-scrollbar {
+    width: 6px;
+}
+
+.artist-songs::-webkit-scrollbar-track {
+    background: #282828;
+    border-radius: 3px;
+}
+
+.artist-songs::-webkit-scrollbar-thumb {
+    background: #1DB954;
+    border-radius: 3px;
+}
+
+.artist-songs h3 {
+    margin-top: 0;
+    color: #1DB954;
+    font-size: 1.2em;
+}
+
+.artist-songs ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.artist-songs li {
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.artist-songs li:hover {
+    background-color: #444;
+}
+
+.artist-songs li:last-child {
+    border-bottom: none;
+}
+
+/* 操作說明視窗樣式 */
+.modal {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 850px;
+    max-height: 100vh;
+    background-color: #282828;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content {
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling if needed */
+    max-height: 100vh; /* Match the modal's max-height */
+}
+
+.close-btn {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #b3b3b3;
+}
+
+.close-btn:hover {
+    color: #1DB954;
+}
+
+.instruction-divider {
+    border: none;           /* 移除預設樣式 */
+    border-top: 1px solid #fff;  /* 上方白色線 */
+    margin: -15px 0 -5px 0;  /* 與上下元素距離 */
+}
+
+/* Add this to the existing .instruction-text style */
+.instruction-text {
+    color: #fff;
+    line-height: 1.8;
+    max-height: 85vh;  /* Set maximum height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    padding-right: 10px;  /* Add padding for scrollbar */
+    scrollbar-width: thin;  /* Firefox */
+    scrollbar-color: #666 #282828;  /* Firefox */
+}
+#instruction-modal .modal-content h2 {
+    color: #1DB954;
+}
+
+.instruction-text h2 {
+    color: #1DB954;
+    margin-bottom: 20px;
+}
+
+.instruction-text h3 {
+    color: #1DB954;
+    margin-top: 20px;
+    margin-bottom: -10px;
+}
+
+.instruction-text ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.instruction-text li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.instruction-text li:before {
+    content: "•";
+    color: #fff;
+    position: absolute;
+    left: 0;
+}
+
+/* Add styles for WebKit browsers (Chrome, Safari) */
+.instruction-text::-webkit-scrollbar {
+    width: 8px;
+}
+
+.instruction-text::-webkit-scrollbar-track {
+    background: #282828;
+}
+
+.instruction-text::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.instruction-text::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* 問號按鈕樣式 */
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #1DB954;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.help-button span {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.help-button:hover {
+    background-color: #1ed760;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+/* 圖例區域樣式 */
+#legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: white; /* 背景改為白色 */
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: rgba(40, 40, 40, 0.8); /* 字體顏色改為 rgba(40, 40, 40, 0.8) */
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 增加陰影使圖例更明顯 */
+    /* z-index: 100; 確保圖例在最上層 */
+}
+
+/* 圖例項目 */
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+/* 圖形樣式 */
+.legend-shape {
+    width: 20px; /* 增大圖形尺寸以匹配放大縮小按鈕 */
+    height: 20px;
+    margin-right: 8px;
+    display: inline-block;
+    /* border: 2px solid rgba(40, 40, 40, 0.8); 外框顏色 */
+    box-sizing: border-box;
+}
+
+/* 圓形 */
+.legend-shape.circle {
+    border-radius: 50%;
+}
+
+/* 方形 */
+.legend-shape.square {
+    border-radius: 0px;
+}
+
+/* 各大洲顏色 */
+.legend-shape.asia {
+    background-color: #4abec0;     /* 藍綠色 */
+}
+
+.legend-shape.america {
+    background-color: #FFB6C1;     /* 粉色 */
+}
+
+.legend-shape.europe {
+    background-color: #3d62d0;     /* 深藍色 */
+}
+
+.legend-shape.africa {
+    background-color: #FFA500;     /* 橘色 */
+}
+
+.legend-shape.oceania {
+    background-color: #a485e3;     /* 紫色 */
+}
+
+.legend-shape.mutual {
+    background-color: #1DB954;     /* Spotify 綠色 */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* 圖例互動效果 */
+.legend-item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.legend-item:hover {
+    transform: scale(1.05);
+}
+
+.legend-shape {
+    transition: opacity 0.3s ease;
+}
+
+/* 可以加入點擊效果 */
+.legend-item:active .legend-shape {
+    opacity: 0.8;
+}
+
+/* 修改現有的 info-row 樣式 */
+.info-row {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.rank-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rank-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rank-number {
+    color: white;
+}
+
+/* 國旗容器和提示框樣式 */
+.flag-container {
+    position: relative;
+    display: inline-block;
+}
+
+.country-flag {
+    font-size: 20px;
+    line-height: 1;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.flag-tooltip {
+    visibility: hidden;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.flag-container:hover .flag-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 添加提示框的小箭頭 */
+.flag-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+/* 篩選器容器 */
+.song-filters {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.explicit-filter {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ color: white;
+}
+
+.toggle-switch {
+ position: relative;
+ display: inline-block;
+ width: 50px;
+ height: 24px;
+}
+
+.switch-slider {
+ background: #282828;
+ border-radius: 24px;
+ transition: 0.3s;
+ position: absolute;
+ inset: 0;
+}
+
+.switch-slider:before {
+ content: '';
+ position: absolute;
+ height: 18px;
+ width: 18px;
+ left: 3px;
+ bottom: 3px;
+ background: white;
+ border-radius: 50%;
+ transition: 0.3s;
+}
+
+input:checked + .switch-slider {
+ background: #282828;
+}
+
+input:checked + .switch-slider:before {
+ transform: translateX(26px);
+}
+
+#duration-select {
+ background: #282828;
+ color: white;
+ border: none;
+ padding: 6px 16px;
+ border-radius: 20px;
+ font-size: 14px;
+}
+
+#duration-select:hover {
+ background: #383838;
+}
+
+.selected-countries {
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 14px;
+ }
+
+ .header-bottom {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   width: 100%;
+}
+
+/* Header Layout */
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Selected Countries Panel */
+#selected-countries {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background-color: #282828;
+    border-radius: 8px;
+    padding: 7px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: calc(180px * 5 + 32px);
+    font-size: 13px;
+}
+
+.selected-country {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 1px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 0 0 160px;
+}
+
+.selected-country:last-child {
+    margin-bottom: 0;
+}
+
+.selected-country:hover {
+    background: rgba(255, 255, 255, 0.2);
+ }
+
+.selected-country .country-flag {
+    font-size: 13px;
+}
+
+.selected-country .country-name {
+    color: white;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.country-chip {
+    position: relative;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.country-chip:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.country-chip .tooltip {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+}
+
+.country-chip:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}

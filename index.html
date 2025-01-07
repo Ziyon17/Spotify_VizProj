@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Spotify 全球音樂影響力視覺化</title>
+   <link rel="stylesheet" href="style.css">
+   <script src="https://d3js.org/d3.v7.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+</head>
+<body>
+   <div id="main-container">
+       <!-- Instructions Modal -->
+       <div id="instruction-modal" class="modal">
+           <div class="modal-content">
+               <span class="close-btn">&times;</span>
+               <h2>Instructions</h2>
+               <hr class="instruction-divider">
+               <div class="instruction-text">
+                   <p>The Network visualization presents the interconnectedness of global music charts through an interactive network diagram. In this visualization, colored ring nodes represent national music charts, colored dots within represent artists, and the smallest dots represent songs, with lines illustrating their interconnections. Data Source: Sourced from <a href="https://developer.spotify.com/documentation/web-api/reference/get-playlist" target="_blank" style="color: #1DB954; text-decoration: none;">Spotify's Official</a> playlist database, encompassing chart data from 21 countries as of 10/30/2024.</p>
+
+                   <h3>Top Navigation Area</h3>
+                   <div class="instruction-section">
+                       <p><strong>Country Selection:</strong></p>
+                       <ul>
+                           <li>Click on continental menus (Asia, Americas, Europe, Africa, Oceania) to expand country lists for each region.Countries are color-coded by continent</li>
+                           <li>Select multiple countries to compare their music charts</li>
+                           <li>Double-click any continent button to quickly select/deselect all countries in that region</li>
+                           <li>Selected countries appear as flag icons at the left bottom of the screen</li>
+                       </ul>
+                       
+                       <p><strong>Quick Controls:</strong></p>
+                       <ul>
+                           <li>Click the Spotify Logo to reset all selections and return to the Taiwan chart view</li>
+                           <li>Use the "Include Explicit" toggle to show or hide explicit content</li>
+                           <li>Select from the duration dropdown menu to filter songs by length</li>
+                       </ul>
+                       <p>All filters work in combination, allowing you to create highly customized views of the global music landscape.</p>
+                   </div>
+
+                   <h3>Node Graph Panel</h3>
+                   <p>Square nodes in the graph represent internationally popular artists, with numbers inside indicating their chart presence across different countries. Use the zoom controls in the bottom right corner to adjust the graph size for optimal viewing.</p>
+
+                   <h3>Information Sidebar</h3>
+                   <p>This section provides a three-tier information display, featuring a top semicircular popularity meter (0-100), a central artist photo area, and a bottom section for detailed information and song preview functionality.</p>
+
+                   <h3>Interactive Features</h3>
+                   <p>Hover over any node to display its name. In the node graph, country nodes maintain a fixed size, while square artist nodes scale according to their international influence. All nodes can be freely dragged to adjust positions, facilitating exploration of musical connections.</p>
+
+                   <h3>Detailed View</h3>
+                   <ul>
+                       <li>Click on a country node: The node graph panel displays that country's chart visualization, while the information sidebar shows details of its #1 ranked song</li>
+                       <li>Click on an artist node: The node graph panel visualizes the artist's international influence, and the information sidebar lists all their charting songs</li>
+                       <li>Click on a song node: The information sidebar displays comprehensive information about that song</li>
+                       <li>Click on any empty space in the node graph panel to clear the current highlight state</li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+
+       <!-- Help Button -->
+       <div id="help-button" class="help-button hidden">
+           <span>?</span>
+       </div>
+
+       <!-- Spotify Banner Area -->
+       <header id="header">
+           <div class="header-main">
+               <div class="logo-section">
+                   <div id="selected-countries"></div>
+                   <div id="logo">
+                       <img src="spotify-logo.png" alt="Spotify Logo" style="width: 250px; height: 80px; cursor: pointer;">
+                   </div>
+               </div>
+               <!-- Continental Menu -->
+               <nav class="nav-menu">
+                   <ul class="menu">
+                       <li class="menu-item">
+                           <button class="menu-btn">Asia</button>
+                           <ul class="submenu">
+                               <li><button data-country="Taiwan">Taiwan</button></li>
+                               <li><button data-country="Japan">Japan</button></li>
+                               <li><button data-country="South Korea">South Korea</button></li>
+                               <li><button data-country="Malaysia">Malaysia</button></li>
+                               <li><button data-country="China">China</button></li>
+                           </ul>
+                       </li>
+                       <li class="menu-item">
+                           <button class="menu-btn">America</button>
+                           <ul class="submenu">
+                               <li><button data-country="USA">USA</button></li>
+                               <li><button data-country="Canada">Canada</button></li>
+                               <li><button data-country="Mexico">Mexico</button></li>
+                               <li><button data-country="Dominican Republic">Dominican Republic</button></li>
+                               <li><button data-country="Colombia">Colombia</button></li>
+                           </ul>
+                       </li>
+                       <li class="menu-item">
+                           <button class="menu-btn">Europe</button>
+                           <ul class="submenu">
+                               <li><button data-country="France">France</button></li>
+                               <li><button data-country="Italy">Italy</button></li>
+                               <li><button data-country="Spain">Spain</button></li>
+                               <li><button data-country="Germany">Germany</button></li>
+                               <li><button data-country="England">England</button></li>
+                           </ul>
+                       </li>
+                       <li class="menu-item">
+                           <button class="menu-btn">Africa</button>
+                           <ul class="submenu">
+                               <li><button data-country="South Africa">South Africa</button></li>
+                               <li><button data-country="Morocco">Morocco</button></li>
+                               <li><button data-country="Egypt">Egypt</button></li>
+                               <li><button data-country="Nigeria">Nigeria</button></li>
+                           </ul>
+                       </li>
+                       <li class="menu-item">
+                           <button class="menu-btn">Oceania</button>
+                           <ul class="submenu">
+                               <li><button data-country="Australia">Australia</button></li>
+                               <li><button data-country="New Zealand">New Zealand</button></li>
+                           </ul>
+                       </li>
+                   </ul>
+               </nav>
+               <!-- Filters -->
+               <div class="song-filters">
+                   <div class="explicit-filter">
+                       <span>Include Explicit</span>
+                       <label class="toggle-switch">
+                           <input type="checkbox" id="explicit-toggle">
+                           <span class="switch-slider"></span>
+                       </label>
+                   </div>
+                   <div class="duration-filter">
+                       <select id="duration-select">
+                           <option value="all">All Durations</option>
+                           <option value="short">< 3 min</option>
+                           <option value="medium">3-5 min</option>
+                           <option value="long">> 5 min</option>
+                       </select>
+                   </div>
+               </div>
+           </div>
+       </header>
+
+       <!-- Main Content Area -->
+       <div id="content-container">
+           <!-- Network Graph Area -->
+           <div id="graph-container">
+               <svg id="graph"></svg>
+               <!-- Legend -->
+               <div id="legend">
+                   <div class="legend-item asia-legend">
+                       <span class="legend-shape circle asia"></span>
+                       <span class="legend-label">Asia</span>
+                   </div>
+                   <div class="legend-item america-legend">
+                       <span class="legend-shape circle america"></span>
+                       <span class="legend-label">America</span>
+                   </div>
+                   <div class="legend-item europe-legend">
+                       <span class="legend-shape circle europe"></span>
+                       <span class="legend-label">Europe</span>
+                   </div>
+                   <div class="legend-item africa-legend">
+                       <span class="legend-shape circle africa"></span>
+                       <span class="legend-label">Africa</span>
+                   </div>
+                   <div class="legend-item oceania-legend">
+                       <span class="legend-shape circle oceania"></span>
+                       <span class="legend-label">Oceania</span>
+                   </div>
+                   <div class="legend-item mutual-legend">
+                       <span class="legend-shape square mutual"></span>
+                       <span class="legend-label">Mutual</span>
+                   </div>
+               </div>
+               <!-- Zoom Controls -->
+               <div id="zoom-controls">
+                   <button id="zoom-in" class="zoom-btn">+</button>
+                   <button id="zoom-out" class="zoom-btn">-</button>
+                   <button id="fullscreen" class="zoom-btn">⛶</button>
+               </div>
+           </div>
+
+           <!-- Info Sidebar -->
+           <div id="info-sidebar">
+               <!-- Popularity Meter -->
+               <div class="popularity-section">
+                   <svg viewBox="0 0 200 100" class="popularity-meter">
+                       <path class="meter-bg" d="M20,90 A70,70 0 0,1 180,90" fill="none" stroke="#333" stroke-width="10"/>
+                       <path class="meter-progress" d="M20,90 A70,70 0 0,1 180,90" fill="none" stroke="#1DB954" stroke-width="10"/>
+                       <text x="100" y="85" class="popularity-value" text-anchor="middle">--</text>
+                       <text x="100" y="50" class="popularity-label" text-anchor="middle">Popularity</text>
+                   </svg>
+               </div>
+
+               <!-- Artist Photo Section -->
+               <div class="artist-photo-container">
+                   <img id="artist-photo" src="/api/placeholder/200/200" alt="Artist Photo">
+               </div>
+
+               <!-- Song Info Section -->
+               <div class="song-info" id="song-info">
+                   <div class="song-header">
+                       <h2 id="song-title" class="spotify-green"></h2>
+                       <a id="preview-button" href="#" target="_blank" class="play-button">
+                           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                               <path d="M9 6.5L17 12l-8 5.5z"/>
+                           </svg>
+                       </a>
+                   </div>
+                   <div class="info-row">
+                       <span class="info-label">Artist:</span>
+                       <span id="artist-name" class="info-value"></span>
+                   </div>
+                   <div class="info-row">
+                       <span class="info-label">Release Date:</span>
+                       <span id="release-date" class="info-value"></span>
+                   </div>
+                   <div class="info-row">
+                       <span class="info-label">Rank:</span>
+                       <span id="song-rank" class="info-value"></span>
+                   </div>
+               </div>
+
+               <!-- Artist Songs List -->
+               <div class="artist-songs" id="artist-songs" style="display: none;">
+                   <h3>Artist's Songs</h3>
+                   <ul id="songs-list"></ul>
+               </div>
+           </div>
+       </div>
+   </div>
+   <script src="script.js"></script>
+</body>
+</html>
