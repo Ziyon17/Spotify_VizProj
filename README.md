@@ -12,5 +12,5 @@ Explore insightful visualizations and trends derived from Spotify's music rankin
 
 ## Tech Stack  
 - **Frontend**: HTML, CSS, JavaScript  
-- **Visualization**: D3.js, Chart.js  
+- **Visualization**: D3.js
 - **Data**: Spotify API, Processed CSV  
